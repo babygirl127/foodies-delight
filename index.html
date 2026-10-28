@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodie Delight - Order Delicious Food Online</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* === LOGIN & SIGNUP OVERLAY STYLES === */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(158, 78, 153, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .auth-box {
+            background: #7d5555;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(93, 69, 159, 0.2);
+        }
+
+        .auth-box h2 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .auth-box input {
+            width: 90%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .auth-box button {
+            background-color: #294e8a;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            width: 95%;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .auth-box button:hover {
+            background-color: #32a1b0;
+        }
+
+        .toggle-link {
+            margin-top: 10px;
+            display: block;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .remember-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            margin: 10px auto;
+            font-size: 0.9em;
+            color: #272da9;
+        }
+
+        .show-pass {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .show-pass i {
+            position: absolute;
+            right: 35px;
+            top: 38%;
+            cursor: pointer;
+            color: #e4a5a5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== LOGIN & SIGNUP OVERLAY ===== -->
+    <div class="overlay" id="authOverlay">
+        <!-- LOGIN FORM -->
+        <div class="auth-box" id="loginBox">
+            <h2>Login to Foodie Delight</h2>
+            <input type="text" id="loginEmail" placeholder="Email">
+            
+            <div class="show-pass">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <i class="fas fa-eye" id="toggleLoginPass"></i>
+            </div>
+
+            <div class="remember-container">
+                <label><input type="checkbox" id="rememberMe"> Remember Me</label>
+            </div>
+
+            <button onclick="login()">Login</button>
+            <p class="toggle-link" onclick="showSignup()">Don’t have an account? Sign Up</p>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div class="auth-box hidden" id="signupBox">
+            <h2>Create Your Account</h2>
+            <input type="text" id="signupName" placeholder="Full Name">
+            <input type="email" id="signupEmail" placeholder="Email">
+            
+            <div class="show-pass">
+                <input type="password" id="signupPassword" placeholder="Password">
+                <i class="fas fa-eye" id="toggleSignupPass"></i>
+            </div>
+
+            <button onclick="signup()">Sign Up</button>
+            <p class="toggle-link" onclick="showLogin()">Already have an account? Login</p>
+        </div>
+    </div>
+
+    <!-- ===== MAIN WEBSITE CONTENT ===== -->
+    <div id="mainContent" class="hidden">
+        <!-- Header Section -->
+        <header>
+            <div class="container">
+                <div class="logo">  
+                    <img src="logo.png" alt="Foodie Delight Logo">
+                    <h1>Foodie Delight</h1>
+                </div>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="index.html" class="active">Home</a></li>
+                        <li><a href="menu.html">Menu</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#" id="cartLink">Cart <span class="cart-count">0</span></a></li>
+                        <li><a href="#" onclick="logout()">Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Delicious Food Delivered to Your Doorstep</h1>
+                    <p>Order from our wide selection of mouth-watering dishes prepared by top chefs</p>
+                    <a href="menu.html" class="btn-primary">Order Now</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="categories">
+            <div class="container">
+                <h2>Popular Categories</h2>
+                <div class="category-grid">
+                    <div class="category-card">
+                        <img src="img/category/pizza.jpg" alt="Pizza">
+                        <h3>Pizza</h3>
+                    </div>
+                    <div class="category-card">
+                        <img src="img/category/burger.jpg" alt="Burgers">
+                        <h3>Burgers</h3>
+                    </div>
+                    <div class="category-card">
+                        <img src="img/category/sandwich.jpg" alt="Sandwiches">
+                        <h3>Sandwiches</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Items Section -->
+        <section class="featured">
+            <div class="container">
+                <h2>Featured Items</h2>
+                <div class="food-grid" id="featuredFoods">
+                    <!-- Featured items will be loaded here by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>Foodie Delight</h3>
+                        <p>Delivering delicious food with love since 2025</p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="menu.html">Menu</a></li>
+                            <li><a href="about.html">About</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Contact Us</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> 123 Food Street, Yummy City</p>
+                        <p><i class="fas fa-phone"></i> (123) 456-7890</p>
+                        <p><i class="fas fa-envelope"></i> info@foodiedelight.com</p>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Foodie Delight. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // === LOGIN/SIGNUP LOGIC ===
+        const authOverlay = document.getElementById('authOverlay');
+        const mainContent = document.getElementById('mainContent');
+        const loginBox = document.getElementById('loginBox');
+        const signupBox = document.getElementById('signupBox');
+
+        function showSignup() {
+            loginBox.classList.add('hidden');
+            signupBox.classList.remove('hidden');
+        }
+
+        function showLogin() {
+            signupBox.classList.add('hidden');
+            loginBox.classList.remove('hidden');
+        }
+
+        function signup() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            if (name && email && password) {
+                localStorage.setItem('user', JSON.stringify({ name, email, password }));
+                alert('Signup successful! Please login.');
+                showLogin();
+            } else {
+                alert('Please fill all fields.');
+            }
+        }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const remember = document.getElementById('rememberMe').checked;
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            if (user && email === user.email && password === user.password) {
+                localStorage.setItem('isLoggedIn', true);
+                if (remember) {
+                    localStorage.setItem('rememberedUser', email);
+                } else {
+                    localStorage.removeItem('rememberedUser');
+                }
+                authOverlay.style.display = 'none';
+                mainContent.classList.remove('hidden');
+            } else {
+                alert('Invalid email or password.');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            authOverlay.style.display = 'flex';
+            mainContent.classList.add('hidden');
+        }
+
+        // Show/hide password toggle
+        const toggleLoginPass = document.getElementById('toggleLoginPass');
+        const toggleSignupPass = document.getElementById('toggleSignupPass');
+        const loginPassword = document.getElementById('loginPassword');
+        const signupPassword = document.getElementById('signupPassword');
+
+        toggleLoginPass.addEventListener('click', () => {
+            if (loginPassword.type === 'password') {
+                loginPassword.type = 'text';
+                toggleLoginPass.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                loginPassword.type = 'password';
+                toggleLoginPass.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        });
+
+        toggleSignupPass.addEventListener('click', () => {
+            if (signupPassword.type === 'password') {
+                signupPassword.type = 'text';
+                toggleSignupPass.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                signupPassword.type = 'password';
+                toggleSignupPass.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        });
+
+        // Auto-check login state
+        window.onload = () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const rememberedUser = localStorage.getItem('rememberedUser');
+            if (rememberedUser) {
+                document.getElementById('loginEmail').value = rememberedUser;
+                document.getElementById('rememberMe').checked = true;
+            }
+            if (isLoggedIn) {
+                authOverlay.style.display = 'none';
+                mainContent.classList.remove('hidden');
+            } else {
+                authOverlay.style.display = 'flex';
+            }
+        };
+    </script>
+</body>
+</html>
